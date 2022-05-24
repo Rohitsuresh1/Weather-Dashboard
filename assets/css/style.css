@@ -1,0 +1,60 @@
+.title {
+    text-align: center;
+    background-image: linear-gradient(to right, rgb(70, 163, 244), rgb(255, 217, 0));
+    color: rgb(0, 0, 0);
+    height: 40px;
+}
+
+.searchcontainer {
+    width: 20%;
+    float: left;
+    background-color: bisque;
+
+}
+h2 {
+    position: relative;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 8px;
+}
+.input,.btn {
+    display: block;
+    width: 97%;
+    height: 25px;
+}
+
+.btn {
+    background-color: rgb(129, 215, 129);
+    width: 100%;
+    margin-top: 10px;
+    height: 35px;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.historybtn {
+    /* position: relative;
+    margin-top: 15px; */
+    background-color: grey;
+    height: 28px;
+    display: block;
+    width: 100%;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.results {
+    margin-left: 20px;
+    margin-top: 20px;
+    background-color: blanchedalmond;
+}
+
+.daycontainer {
+    display: block;
+    border: 2px rgb(0, 0, 0);
+}
+
+.forecast {
+    display: inline;
+    margin-top: 20px;
+}
