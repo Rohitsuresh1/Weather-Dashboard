@@ -20,6 +20,7 @@ var geoApiCall = function(){
                 {alert("Error: Please enter a valid city!");
                 return;
                 }
+                console.log(data);
                 var lat=data[0].lat;
                 var long=data[0].lon;
                 cityEl.className="city";
