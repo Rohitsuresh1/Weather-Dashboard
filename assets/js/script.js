@@ -3,7 +3,7 @@ var forecastEl=document.querySelector(".forecast");
 var btnEl=document.querySelector(".btn");
 var inputCity; var counter;
 var cityEl=document.createElement("h2");
-var geoApi="http://api.openweathermap.org/geo/1.0/direct?q=";
+var geoApi="https://api.openweathermap.org/geo/1.0/direct?q=";
 var apiKey="c6fc4977c85a1eebd5a68d26a53b18d6";
 var weatherApi="https://api.openweathermap.org/data/2.5/onecall?";
 var historyEl=document.querySelector(".history");
