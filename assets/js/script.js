@@ -12,10 +12,12 @@ var historyEl=document.querySelector(".history");
 var date=moment().format('l'); 
 
 var geoApiCall = function(){
- fetch(geoApi+inputCity+"&appid="+apiKey).then(function(response){
+    fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(geoApi+inputCity+"&appid="+apiKey)}`).then(function(response){
         if(response.ok){
             response.json().then(function(data){
                 var dataExist=false;
+                data=JSON.parse(data.contents);
+                console.log(data);
                 if(data.length===0)
                 {alert("Error: Please enter a valid city!");
                 return;
@@ -48,9 +50,11 @@ var geoApiCall = function(){
 
 
 var currentApiCall=function(lat,long){
-    fetch(weatherApi+"lat="+lat+"&lon="+long+"&appid="+apiKey+"&units=metric").then(function(response){
+    fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(weatherApi+"lat="+lat+"&lon="+long+"&appid="+apiKey+"&units=metric")}`).then(function(response){
         if(response.ok){
             response.json().then(function(data){
+            data=JSON.parse(data.contents);
+            console.log(data);
             var icon=data.current.weather[0].icon;
             var img = new Image();
             img.src = `http://openweathermap.org/img/wn/${icon}@2x.png`;
@@ -74,7 +78,6 @@ var currentApiCall=function(lat,long){
             <h4 class="${index}"> UV Index: ${uV} </h4>
             `;
             dayEl.appendChild(cityDetails);
-            // forecastEl.textContent="5 Day Forecast";
             for(i=0;i<5;i++){
                 var forecastContainerEl=document.createElement("div");
                 forecastContainerEl.className="col";
