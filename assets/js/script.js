@@ -1,4 +1,3 @@
-var historyEl=document.querySelector(".history");
 var dayEl=document.querySelector(".daycontainer");
 var forecastEl=document.querySelector(".forecast");
 var btnEl=document.querySelector(".btn");
@@ -7,6 +6,7 @@ var cityEl=document.createElement("h2");
 var geoApi="http://api.openweathermap.org/geo/1.0/direct?q=";
 var apiKey="c6fc4977c85a1eebd5a68d26a53b18d6";
 var weatherApi="https://api.openweathermap.org/data/2.5/onecall?";
+var historyEl=document.querySelector(".history");
 
 
 var date=moment().format('l'); 
@@ -31,21 +31,7 @@ var geoApiCall = function(){
     })
 };
 
-// var weatherUrl = `${weatherApiRoot}onecall?lat=${lat}&lon=${lon}&appid=${weatherApiKey}`;
-// fetch(weatherUrl)
-//   .then(function (res) {
-//     return res.json();
-//   })
-//   .then(function (data) {
-//     var temptext = document.getElementById("current-temp");
-//     temptext.innerHTML = data.current.temp - 273;
-//     var windtext = document.getElementById("current-wind");
-//     windtext.innerHTML = data.current.wind_speed;
-//     var humidtext = document.getElementById("current-humid");
-//     humidtext.innerHTML = data.current.humidity;
-//     var UVtext = document.getElementById("current-UV");
-//     UVtext.innerHTML = data.current.uvi;
-//     console.log(data);
+
 var currentApiCall=function(lat,long){
     fetch(weatherApi+"lat="+lat+"&lon="+long+"&appid="+apiKey).then(function(response){
         if(response.ok){
@@ -62,17 +48,19 @@ var currentApiCall=function(lat,long){
             alert("Error:"+response.statusText);
         }
     })
+    getStorage();
 };
 
 
-var getLocalStorage = function() {
-    var storedEl=document.createElement("button");
-    storedEl.className="historybtn";
+var getStorage = function() {
     if(localStorage){
-        counter=localStorage.length-1;
+        historyEl.textContent="";
+        var storedEl=document.createElement("button");
+        storedEl.className="historybtn";
+        counter=localStorage.length;
         var lineEL=document.createElement("hr");
         historyEl.appendChild(lineEL);
-        for(i=counter;i>=0;i--){
+        for(i=counter-1;i>=0;i--){
             var cityHistory=localStorage.getItem(i);
             var storeHistory=document.createElement("button");
             storeHistory.className="historybtn";
@@ -81,17 +69,25 @@ var getLocalStorage = function() {
             console.log(storeHistory);
             historyEl.appendChild(storeHistory);
         };
-    }
+    };
 };
 
+var click = function(){
 btnEl.addEventListener('click',function(){
     inputCity=document.getElementById("searchCity").value;
+    document.getElementById("searchCity").value="";
     geoApiCall();
-    getLocalStorage();
+});
+};
+
+historyEl.addEventListener('click',function(event){
+    console.log(event.target.textContent);
+    inputCity=event.target.textContent;
+    geoApiCall();
 });
 
-
-
+click();
+getStorage();
 
 
 
