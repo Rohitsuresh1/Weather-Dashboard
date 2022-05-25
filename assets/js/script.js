@@ -3,7 +3,7 @@ var forecastEl=document.querySelector(".forecast");
 var btnEl=document.querySelector(".btn");
 var inputCity; var counter;
 var cityEl=document.createElement("h2");
-var geoApi="http://api.openweathermap.org/geo/1.0/direct?q=";
+var geoApi="https://api.openweathermap.org/geo/1.0/direct?q=";
 var apiKey="c6fc4977c85a1eebd5a68d26a53b18d6";
 var weatherApi="https://api.openweathermap.org/data/2.5/onecall?";
 var historyEl=document.querySelector(".history");
@@ -12,7 +12,7 @@ var historyEl=document.querySelector(".history");
 var date=moment().format('l'); 
 
 var geoApiCall = function(){
- fetch(geoApi+inputCity+"&appid="+apiKey).then(function(response){
+ fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(geoApi+inputCity+"&appid="+apiKey)}`).then(function(response){
         if(response.ok){
             response.json().then(function(data){
                 var dataExist=false;
@@ -48,7 +48,7 @@ var geoApiCall = function(){
 
 
 var currentApiCall=function(lat,long){
-    fetch(weatherApi+"lat="+lat+"&lon="+long+"&appid="+apiKey+"&units=metric").then(function(response){
+    fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(weatherApi+"lat="+lat+"&lon="+long+"&appid="+apiKey+"&units=metric")}`).then(function(response){
         if(response.ok){
             response.json().then(function(data){
             var icon=data.current.weather[0].icon;
