@@ -15,13 +15,24 @@ var geoApiCall = function(){
  fetch(geoApi+inputCity+"&appid="+apiKey).then(function(response){
         if(response.ok){
             response.json().then(function(data){
+                var dataExist=false;
                 var lat=data[0].lat;
                 var long=data[0].lon;
                 cityEl.className="city";
-                console.log(data);
                 cityEl.textContent=data[0].name+" "+date;
-                localStorage.setItem(counter,data[0].name);
-                counter++;
+                if(localStorage){
+                    for(i=0;i<localStorage.length;i++){
+                       if(data[0].name===localStorage.getItem(i))
+                           dataExist=true;
+                    };
+                    if(!dataExist){
+                        localStorage.setItem(counter,data[0].name);
+                        counter++;
+                    }
+                } else {
+                    localStorage.setItem(counter,data[0].name);
+                    counter++;
+                }
                 dayEl.appendChild(cityEl);
                 currentApiCall(lat,long);
             })
@@ -33,21 +44,40 @@ var geoApiCall = function(){
 
 
 var currentApiCall=function(lat,long){
-    fetch(weatherApi+"lat="+lat+"&lon="+long+"&appid="+apiKey).then(function(response){
+    fetch(weatherApi+"lat="+lat+"&lon="+long+"&appid="+apiKey+"&units=metric").then(function(response){
         if(response.ok){
             response.json().then(function(data){
-            console.log(data);
-            var temp=data.current.temp - 273;
+            var temp=data.current.temp;
             var wind=data.current.wind_speed;
             var humidity=data.current.humidity;
             var uV=data.current.uvi;
-            console.log(temp,wind,humidity,uV);
-            
+            var cityDetails=document.createElement("div");
+            cityDetails.innerHTML+= `
+            <h4> Temp: ${temp}<span>&#176;</span>C</h4>
+            <h4> Wind: ${wind} MPS </h4>
+            <h4> Humidity: ${humidity}%</h4>
+            <h4> UV Index: ${uV} </h4>
+            `;
+            dayEl.appendChild(cityDetails);
+            // forecastEl.textContent="5 Day Forecast";
+            for(i=0;i<5;i++){
+                var forecastContainerEl=document.createElement("div");
+                forecastContainerEl.className="col";
+                forecastContainerEl.innerHTML=`
+                <h3>${moment().add(1+i, 'd').format('l')} </h3>
+                <h4>Temp: ${data.daily[i].temp.day}<span>&#176;</span>C</h4>
+                <h4>Wind: ${data.daily[i].wind_speed} MPS</h4>
+                <h4>Humidity: ${data.daily[i].humidity}%</h4>
+                `;
+                forecastEl.appendChild(forecastContainerEl);
+               
+            }
             })
         } else {
             alert("Error:"+response.statusText);
         }
     })
+   
     getStorage();
 };
 
@@ -64,9 +94,7 @@ var getStorage = function() {
             var cityHistory=localStorage.getItem(i);
             var storeHistory=document.createElement("button");
             storeHistory.className="historybtn";
-            console.log(i,cityHistory);
             storeHistory.textContent=cityHistory;
-            console.log(storeHistory);
             historyEl.appendChild(storeHistory);
         };
     };
@@ -76,13 +104,16 @@ var click = function(){
 btnEl.addEventListener('click',function(){
     inputCity=document.getElementById("searchCity").value;
     document.getElementById("searchCity").value="";
+    dayEl.innerHTML="";
+    forecastEl.innerHTML="";
     geoApiCall();
 });
 };
 
 historyEl.addEventListener('click',function(event){
-    console.log(event.target.textContent);
     inputCity=event.target.textContent;
+    dayEl.innerHTML="";
+    forecastEl.innerHTML="";
     geoApiCall();
 });
 
