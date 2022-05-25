@@ -82,3 +82,20 @@ html{
     padding-left: 10px;
     background-color: rgb(54, 144, 222);
 }
+
+.low{
+    background-color: green;
+    width: fit-content;
+}
+.med{
+    background-color: yellow;
+    width: fit-content;
+}
+.high{
+    background-color: red;
+    width: fit-content;
+}
+img {
+    display: flex;
+    position: relative;
+}

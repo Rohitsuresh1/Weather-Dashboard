@@ -16,6 +16,10 @@ var geoApiCall = function(){
         if(response.ok){
             response.json().then(function(data){
                 var dataExist=false;
+                if(data.length===0)
+                {alert("Error: Please enter a valid city!");
+                return;
+                }
                 var lat=data[0].lat;
                 var long=data[0].lon;
                 cityEl.className="city";
@@ -47,24 +51,38 @@ var currentApiCall=function(lat,long){
     fetch(weatherApi+"lat="+lat+"&lon="+long+"&appid="+apiKey+"&units=metric").then(function(response){
         if(response.ok){
             response.json().then(function(data){
+            var icon=data.current.weather[0].icon;
+            var img = new Image();
+            img.src = `http://openweathermap.org/img/wn/${icon}@2x.png`;
+            cityEl.appendChild(img);
             var temp=data.current.temp;
             var wind=data.current.wind_speed;
             var humidity=data.current.humidity;
             var uV=data.current.uvi;
             var cityDetails=document.createElement("div");
+            var index;
+            if(uV<5)
+                index="low";
+            else if(uV>=5&&uV<=8)
+                index="med";
+            else
+                index="high";
             cityDetails.innerHTML+= `
             <h4> Temp: ${temp}<span>&#176;</span>C</h4>
             <h4> Wind: ${wind} MPS </h4>
             <h4> Humidity: ${humidity}%</h4>
-            <h4> UV Index: ${uV} </h4>
+            <h4 class="${index}"> UV Index: ${uV} </h4>
             `;
             dayEl.appendChild(cityDetails);
             // forecastEl.textContent="5 Day Forecast";
             for(i=0;i<5;i++){
                 var forecastContainerEl=document.createElement("div");
                 forecastContainerEl.className="col";
+                icon=data.daily[i].weather[0].icon;
+                var imgSrc=`http://openweathermap.org/img/wn/${icon}@2x.png`;
                 forecastContainerEl.innerHTML=`
                 <h3>${moment().add(1+i, 'd').format('l')} </h3>
+                <img src=${imgSrc}></img>
                 <h4>Temp: ${data.daily[i].temp.day}<span>&#176;</span>C</h4>
                 <h4>Wind: ${data.daily[i].wind_speed} MPS</h4>
                 <h4>Humidity: ${data.daily[i].humidity}%</h4>
